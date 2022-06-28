@@ -1,9 +1,12 @@
 package database
 
 import (
+	"context"
 	_ "context"
 	"database/sql"
+	"fmt"
 	_ "github.com/lib/pq"
+	"kevinPicon/go/src/CvPro/models"
 	//"kevinPicon/go/rest-ws/models"
 	_ "log"
 )
@@ -20,11 +23,23 @@ func NewPostgresRepository(url string) (*PostgresRepository, error) {
 	return &PostgresRepository{db: db}, nil
 }
 
-//func (repo *PostgresRepository) InsertUser(ctx context.Context, user *models.User) error {
-//	_, err := repo.db.ExecContext(ctx, "INSERT INTO users ( id, name, email, password) VALUES ($1, $2, $3, $4)",
-//		user.Id, user.Name, user.Email, user.Password)
-//	return err
-//}
+func (repo *PostgresRepository) InsertUser(ctx context.Context, user *models.User) error {
+	fmt.Println("InsertUser")
+	_, err := repo.db.ExecContext(ctx,
+		"INSERT INTO users ( id, name, description, email) VALUES ($1, $2, $3, $4)", user.Id, user.Name, user.Description, user.Email)
+	_, err = repo.db.ExecContext(ctx,
+		"INSERT INTO user_login ( user_id, username,password) VALUES ($1, $2, $3)", user.Id, user.Username, user.Password)
+	return err
+}
+func (repo *PostgresRepository) GetUserByName(ctx context.Context, userName string) (bool, error) {
+	data, err := repo.db.ExecContext(ctx, "SELECT username FROM user_login WHERE username = $1", userName)
+	x, _ := data.RowsAffected()
+	if x == 0 {
+		return true, err
+	}
+	return false, err
+}
+
 //
 //func (repo *PostgresRepository) InsertPost(ctx context.Context, post *models.Post) error {
 //	_, err := repo.db.ExecContext(ctx, "INSERT INTO posts ( id, title, post_content, user_id) VALUES ($1, $2, $3, $4)",

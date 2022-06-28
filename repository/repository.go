@@ -1,12 +1,13 @@
 package repository
 
 import (
-	_ "context"
-	//"kevinPicon/go/rest-ws/models"
+	"context"
+	"kevinPicon/go/src/CvPro/models"
 )
 
 type UserRepository interface {
-	//InsertUser(ctx context.Context, user *models.User) error
+	GetUserByName(ctx context.Context, userName string) (bool, error)
+	InsertUser(ctx context.Context, user *models.User) error
 	Close() error
 }
 
@@ -15,10 +16,12 @@ var impl UserRepository
 func SetRepository(repo UserRepository) {
 	impl = repo
 }
-
-//func ListPost(ctx context.Context, page uint64) ([]*models.Post, error) {
-//	return impl.ListPost(ctx, page)
-//}
+func GetUserByName(ctx context.Context, userName string) (bool, error) {
+	return impl.GetUserByName(ctx, userName)
+}
+func InsertUser(ctx context.Context, user *models.User) error {
+	return impl.InsertUser(ctx, user)
+}
 
 func Close() error {
 	return impl.Close()
