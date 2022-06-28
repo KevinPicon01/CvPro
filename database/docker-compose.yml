@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+
+  postgres:
+
+    image: postgres
+
+    environment:
+      DATABASE_HOST: 127.0.0.1
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: root
+    ports:
+      - "54321:5432"
+    restart: always
+
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "8080:80"
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+        PGADMIN_DEFAULT_EMAIL: "kgpicon@hotmail.com"
+        PGADMIN_DEFAULT_PASSWORD: "123456"
