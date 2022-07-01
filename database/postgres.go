@@ -32,12 +32,16 @@ func (repo *PostgresRepository) InsertUser(ctx context.Context, user *models.Use
 	return err
 }
 func (repo *PostgresRepository) GetUserByName(ctx context.Context, userName string) (bool, error) {
+	var result bool
 	data, err := repo.db.ExecContext(ctx, "SELECT username FROM user_login WHERE username = $1", userName)
 	x, _ := data.RowsAffected()
+	fmt.Println(x)
 	if x == 0 {
-		return true, err
+		result = true
+		fmt.Println("No existe")
 	}
-	return false, err
+
+	return result, err
 }
 
 //

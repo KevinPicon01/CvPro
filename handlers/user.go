@@ -16,7 +16,7 @@ const (
 )
 
 type VerifyUserRequest struct {
-	Name string `json:"name"`
+	Username string `json:"Username"`
 }
 type SignUpRequest struct {
 	Name        string `json:"name"`
@@ -37,12 +37,13 @@ func VerifyUserHandler(s server.Server) http.HandlerFunc {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		exist, err := repository.GetUserByName(r.Context(), request.Name)
-
+		fmt.Println(request.Username, "request.Username")
+		exist, err := repository.GetUserByName(r.Context(), request.Username)
 		if err != nil {
 			http.Error(w, "Error GUE", http.StatusInternalServerError)
 			return
 		}
+		fmt.Println(exist, " exist")
 		if !exist {
 			http.Error(w, "Usuario ya existe", http.StatusBadRequest)
 			return
@@ -56,7 +57,6 @@ func VerifyUserHandler(s server.Server) http.HandlerFunc {
 }
 func SignUpHandler(s server.Server) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("SignUpHandler")
 		var request = SignUpRequest{}
 		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {
@@ -64,6 +64,7 @@ func SignUpHandler(s server.Server) http.HandlerFunc {
 			return
 		}
 		exist, err := repository.GetUserByName(r.Context(), request.Username)
+
 		if err != nil {
 			http.Error(w, "Error GUE", http.StatusInternalServerError)
 			return
