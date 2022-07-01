@@ -12,6 +12,16 @@ type User struct {
 	Github      string `json:"github"`
 	Twitter     string `json:"twitter"`
 }
+type SignUpRequest struct {
+	Name        string `json:"name"`
+	Username    string `json:"username"`
+	Email       string `json:"email"`
+	Password    string `json:"password"`
+	Description string `json:"description"`
+	Linkedin    string `json:"linkedin"`
+	Github      string `json:"github"`
+	Twitter     string `json:"twitter"`
+}
 type User_education struct {
 	Id         string `json:"id"`
 	User_id    string `json:"user_id"`

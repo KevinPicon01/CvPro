@@ -19,16 +19,6 @@ const (
 type VerifyUserRequest struct {
 	Username string `json:"Username"`
 }
-type SignUpRequest struct {
-	Name        string `json:"name"`
-	Username    string `json:"username"`
-	Email       string `json:"email"`
-	Password    string `json:"password"`
-	Description string `json:"description"`
-	linkedin    string `json:"linkedin"`
-	github      string `json:"github"`
-	twitter     string `json:"twitter"`
-}
 type LoginResponse struct {
 	Token string `json:"token"`
 }
@@ -59,7 +49,7 @@ func VerifyUserHandler(s server.Server) http.HandlerFunc {
 }
 func SignUpHandler(s server.Server) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var request = SignUpRequest{}
+		var request = models.SignUpRequest{}
 		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
@@ -91,9 +81,9 @@ func SignUpHandler(s server.Server) http.HandlerFunc {
 			Password:    string(hashedPass),
 			Username:    request.Username,
 			Description: request.Description,
-			Linkedin:    request.linkedin,
-			Github:      request.github,
-			Twitter:     request.twitter,
+			Linkedin:    request.Linkedin,
+			Github:      request.Github,
+			Twitter:     request.Twitter,
 		}
 		err = repository.InsertUser(r.Context(), &user)
 		if err != nil {
