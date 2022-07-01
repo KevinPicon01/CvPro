@@ -115,16 +115,16 @@ func LoginHandler(s server.Server) http.HandlerFunc {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		userPass, err := repository.GetUserByUsernamePassword(r.Context(), request.Username)
+		user, err := repository.GetUserByUsername(r.Context(), request.Username)
 
-		err = bcrypt.CompareHashAndPassword([]byte(userPass), []byte(request.Password))
+		err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(request.Password))
 		if err != nil {
 			http.Error(w, "Username o Password incorrecto", http.StatusBadRequest)
 			return
 		}
 		// Create JWT token
 		claims := models.AppClaims{
-			UserId: request.Username,
+			UserId: user.Id,
 			StandardClaims: jwt.StandardClaims{
 				ExpiresAt: time.Now().Add(365 * time.Hour * 24).Unix(),
 			},
