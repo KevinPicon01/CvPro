@@ -24,3 +24,7 @@ type Response struct {
 	Message string `json:"message"`
 	Status  bool   `json:"status"`
 }
+type Login struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}

@@ -38,6 +38,13 @@ func (repo *PostgresRepository) GetUserByName(ctx context.Context, userName stri
 	}
 	return result, err
 }
+func (repo *PostgresRepository) GetUserByUsernamePassword(ctx context.Context, username string) (string, error) {
+	var user models.Login
+	err := repo.db.QueryRowContext(ctx, "SELECT password FROM user_login WHERE username = $1",
+		username).Scan(&user.Password)
+
+	return user.Password, err
+}
 
 //
 //func (repo *PostgresRepository) InsertPost(ctx context.Context, post *models.Post) error {
