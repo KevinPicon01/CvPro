@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/segmentio/ksuid"
 	"golang.org/x/crypto/bcrypt"
 	"kevinPicon/go/src/CvPro/models"
@@ -37,13 +36,11 @@ func VerifyUserHandler(s server.Server) http.HandlerFunc {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		fmt.Println(request.Username, "request.Username")
 		exist, err := repository.GetUserByName(r.Context(), request.Username)
 		if err != nil {
 			http.Error(w, "Error GUE", http.StatusInternalServerError)
 			return
 		}
-		fmt.Println(exist, " exist")
 		if !exist {
 			http.Error(w, "Usuario ya existe", http.StatusBadRequest)
 			return
@@ -64,7 +61,6 @@ func SignUpHandler(s server.Server) http.HandlerFunc {
 			return
 		}
 		exist, err := repository.GetUserByName(r.Context(), request.Username)
-
 		if err != nil {
 			http.Error(w, "Error GUE", http.StatusInternalServerError)
 			return
@@ -104,5 +100,4 @@ func SignUpHandler(s server.Server) http.HandlerFunc {
 			Message: "User created successfully",
 		})
 	}
-
 }

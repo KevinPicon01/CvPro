@@ -4,7 +4,6 @@ import (
 	"context"
 	_ "context"
 	"database/sql"
-	"fmt"
 	_ "github.com/lib/pq"
 	"kevinPicon/go/src/CvPro/models"
 	//"kevinPicon/go/rest-ws/models"
@@ -24,7 +23,6 @@ func NewPostgresRepository(url string) (*PostgresRepository, error) {
 }
 
 func (repo *PostgresRepository) InsertUser(ctx context.Context, user *models.User) error {
-	fmt.Println("InsertUser")
 	_, err := repo.db.ExecContext(ctx,
 		"INSERT INTO users ( id, name, description, email) VALUES ($1, $2, $3, $4)", user.Id, user.Name, user.Description, user.Email)
 	_, err = repo.db.ExecContext(ctx,
@@ -35,12 +33,9 @@ func (repo *PostgresRepository) GetUserByName(ctx context.Context, userName stri
 	var result bool
 	data, err := repo.db.ExecContext(ctx, "SELECT username FROM user_login WHERE username = $1", userName)
 	x, _ := data.RowsAffected()
-	fmt.Println(x)
 	if x == 0 {
 		result = true
-		fmt.Println("No existe")
 	}
-
 	return result, err
 }
 
